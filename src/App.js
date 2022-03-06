@@ -1,25 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import './App.css'
+import { useEffect } from 'react'
+import { useStore, useSettings } from './store';
+import AsyncTodos from './components/AsyncTodos';
+import Todos from './components/Todos';
+import Form from './components/Form';
 
 function App() {
+  const removeAllTodos = useStore(state => state.removeAllTodos)
+  const dark = useSettings(state => state.dark)
+  const toggleDarkMode = useSettings(state => state.toggleDarkMode)
+
+  useEffect(() => {
+    if (dark) {
+      document.querySelector('body').classList.add('dark')
+    } else {
+      document.querySelector('body').classList.remove('dark')
+    }
+  }, [dark])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Hello Zustand</h1>
+
+      <button onClick={toggleDarkMode}>Toggle theme</button>
+      <button onClick={removeAllTodos}>Clear all</button>
+
+      <Form />
+      <Todos />
+      <hr />
+      <AsyncTodos />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
